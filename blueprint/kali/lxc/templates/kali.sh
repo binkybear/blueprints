@@ -231,10 +231,10 @@ kali-archive-keyring
     qemu-debootstrap --verbose --variant=minbase --arch=$arch \
         --include=$packages \
         "$release" "$cache/partial-$release-$arch" $MIRROR
-    if [ $? -ne 0 ]; then
-        echo "Failed to download the rootfs, aborting."
-        return 1
-    fi
+    #if [ $? -ne 0 ]; then
+    #    echo "Failed to download the rootfs, aborting."
+    #    return 1
+    #fi
 
     mv "$1/partial-$release-$arch" "$1/rootfs-$release-$arch"
     echo "Download complete."
