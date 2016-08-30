@@ -106,6 +106,7 @@ rm -f $rootfs/debconf.set
 
     encoding=$(echo $LANG | cut -d. -f2)
     chroot $rootfs sed -e "s/^# \(${LANG} ${encoding}\)/\1/" -i /etc/locale.gen 2> /dev/null
+    chroot $rootfs localedef -i en_US -f UTF-8 en_US.UTF-8
 
     # remove pointless services in a container
     chroot $rootfs /usr/sbin/update-rc.d -f checkroot.sh disable
