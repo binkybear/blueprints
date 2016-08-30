@@ -24,9 +24,8 @@
 #
 
 set -e
-set -u
 
-readonly MARU_TAG="maru-$(git describe)"
+MARU_TAG="maru-$(git describe)"
 
 print_help () {
     cat <<EOF
@@ -54,19 +53,7 @@ mount_binfmts () {
     update-binfmts --enable
 }
 
-cleanup () {
-    local opt_name="$1"
-    local rootfs_dir="$2"
-    local tmp_dir="$3"
-
-    mecho "cleaning up..."
-    blueprint_cleanup "$opt_name" "$rootfs_dir"
-    if [ -d "$tmp_dir" ] ; then
-        rm -rf "$tmp_dir"
-    fi
-}
-
-OPT_BLUEPRINT="debian"
+OPT_BLUEPRINT="kali"
 OPT_NAME="$OPT_BLUEPRINT"
 
 ARGS="$(getopt -o b:n:h --long blueprint:,name:,help -n 'build.sh' -- "$@")"
@@ -86,10 +73,10 @@ while true; do
     esac
 done
 
-readonly OUT_DIR="$(pwd)/out"
-readonly TMP_DIR="${OUT_DIR}/${OPT_NAME}-intermediates"
-readonly ROOTFS_DIR="${TMP_DIR}/rootfs"
-readonly ROOTFS_TAR="${OUT_DIR}/${MARU_TAG}-${OPT_NAME}-rootfs.tar.gz"
+OUT_DIR="$(pwd)/out"
+TMP_DIR="${OUT_DIR}/${OPT_NAME}-intermediates"
+ROOTFS_DIR="${TMP_DIR}/rootfs"
+ROOTFS_TAR="${OUT_DIR}/${MARU_TAG}-${OPT_NAME}-rootfs.tar.gz"
 
 plugin="$(pwd)/blueprint/${OPT_BLUEPRINT}/plugin.sh"
 if [ ! -e "$plugin" ] ; then
@@ -103,9 +90,7 @@ mount_binfmts
 mecho "loading distro plugin..."
 pushd >/dev/null "$(dirname "$plugin")"
 
-source "$plugin"
-
-trap "cleanup $OPT_NAME $ROOTFS_DIR $TMP_DIR" EXIT
+source $plugin
 
 mecho "building image..."
 blueprint_build "$OPT_NAME" "$ROOTFS_DIR" "$@"
@@ -117,5 +102,13 @@ tar czf "$ROOTFS_TAR" -C "$(dirname "$ROOTFS_DIR")" "$(basename "$ROOTFS_DIR")"
 sha1="$(sha1sum "$ROOTFS_TAR" | cut -c -8)"
 release="${ROOTFS_TAR%.tar.gz}-${sha1}.tar.gz"
 mv "$ROOTFS_TAR" "$release"
+
+mecho "cleaning up..."
+blueprint_cleanup "$OPT_NAME" "$ROOTFS_DIR"
+if [ -d "$TMP_DIR" ] ; then
+    rm -rf "$TMP_DIR"
+fi
+
+popd >/dev/null
 
 mecho "Build success! See $release"
