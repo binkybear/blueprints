@@ -33,7 +33,7 @@ done
 # Make sure the usual locations are in PATH
 export PATH=$PATH:/usr/sbin:/usr/bin:/sbin:/bin
 
-MIRROR=${MIRROR:-http://repo.kali.org}
+MIRROR=${MIRROR:-http://repo.kali.org/kali}
 LOCALSTATEDIR="/var"
 LXC_TEMPLATE_CONFIG="/usr/share/lxc/config"
 
@@ -456,6 +456,7 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
+# http://repo.kali.org/kali/dists/kali-rolling/Release
 current_release=`wget ${MIRROR}/dists/kali-rolling/Release -O - 2> /dev/null | head |awk '/^Codename: (.*)$/ { print $2; }'`
 release=${release:-${current_release}}
 valid_releases=('kali-rolling' 'sana' 'kali-bleeding-edge')
