@@ -94,6 +94,14 @@ EOF
 $hostname
 EOF
 
+    cat << EOF > $rootfs/debconf.set
+console-common console-data/keymap/policy select Select keymap from full list
+console-common console-data/keymap/full select en-latin1-nodeadkeys
+EOF
+
+chroot $rootfs debconf-set-selections /debconf.set
+rm -f $rootfs/debconf.set
+
     # reconfigure some services
 
     encoding=$(echo $LANG | cut -d. -f2)
@@ -113,17 +121,14 @@ exit 101
 EOF
         chmod +x $rootfs/usr/sbin/policy-rc.d
 
-        if [ -f $rootfs/etc/init/ssh.conf ]; then
-            mv $rootfs/etc/init/ssh.conf $rootfs/etc/init/ssh.conf.disabled
-        fi
-
         rm -f $rootfs/etc/ssh/ssh_host_*key*
 
         DPKG_MAINTSCRIPT_PACKAGE=openssh DPKG_MAINTSCRIPT_NAME=postinst chroot $rootfs /var/lib/dpkg/info/openssh-server.postinst configure
         sed -i "s/root@$(hostname)/root@$hostname/g" $rootfs/etc/ssh/ssh_host_*.pub
 
 	#  Allow root login with password
-	sed -i "s/PermitRootLogin without-password/PermitRootLogin yes/" $rootfs/etc/ssh/sshd_config
+	sed -i -e "s/PermitRootLogin without-password/PermitRootLogin yes/" $rootfs/etc/ssh/sshd_config
+    sed -i -e 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' $rootfs/etc/ssh/sshd_config
 
         rm -f $rootfs/usr/sbin/policy-rc.d
     fi
@@ -140,7 +145,7 @@ EOF
         echo "Timezone in container is not configured. Adjust it manually."
     fi
 
-    password="$(dd if=/dev/urandom bs=6 count=1 2> /dev/null | base64)"
+    password="toor"
 
     echo "root:$password" | chroot $rootfs chpasswd
     echo "Root password is '$password', please change !"
@@ -208,6 +213,7 @@ netbase,\
 net-tools,\
 iproute,\
 openssh-server,\
+tzdata,\
 kali-archive-keyring
 
     cache=$1
