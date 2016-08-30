@@ -15,15 +15,15 @@
 # limitations under the License.
 #
 
-BLUEPRINT_NAME="DEBIAN"
+BLUEPRINT_NAME="KALI"
 
-DEFAULT_RELEASE="jessie"
+DEFAULT_RELEASE="kali-rolling"
 DEFAULT_ARCH="armhf"
 
 # tweaks to upstream template, must be absolute path
 # note: this is only used because older versions of LXC do not support
 # cross-debootstrapping in the debian template
-LXC_TEMPLATE_OVERRIDE="$(pwd)/lxc/templates/debian.sh"
+LXC_TEMPLATE_OVERRIDE="$(pwd)/lxc/templates/kali.sh"
 
 # script to run inside the chroot
 CHROOT_SCRIPT="chroot-configure.sh"
@@ -34,12 +34,12 @@ pecho () {
 
 print_help () {
     cat <<EOF
-Blueprint for building Debian images.
+Blueprint for building Kali images.
 
-Debian-specific options:
+Kali-specific options:
 
-    -r, --release   Debian release to use as the image base.
-                    Defaults to jessie.
+    -r, --release   Kali release to use as the image base.
+                    Defaults to kali-rolling.
 
     -a, --arch      Architecture of generated image.
                     Defaults to armhf.
@@ -77,7 +77,7 @@ EOF
 
     # make sure we have a dynamic mirror for installing packages
     cat > "${rootfs}/etc/apt/sources.list" <<EOF
-deb http://httpredir.debian.org/debian ${release} main
+deb http://http.kali.org/kali ${release} main contrib non-free
 EOF
 
     # disable any default.target
