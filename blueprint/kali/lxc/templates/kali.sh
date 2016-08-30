@@ -99,8 +99,8 @@ console-common console-data/keymap/policy select Select keymap from full list
 console-common console-data/keymap/full select en-latin1-nodeadkeys
 EOF
 
-chroot $rootfs debconf-set-selections /debconf.set
-rm -f $rootfs/debconf.set
+    chroot $rootfs debconf-set-selections /debconf.set
+    rm -f $rootfs/debconf.set
 
     # reconfigure some services
 
@@ -112,7 +112,7 @@ rm -f $rootfs/debconf.set
     chroot $rootfs /usr/sbin/update-rc.d -f checkroot.sh disable
     chroot $rootfs /usr/sbin/update-rc.d -f umountfs disable
     chroot $rootfs /usr/sbin/update-rc.d -f hwclock.sh disable
-    chroot $rootfs /usr/sbin/update-rc.d -f hwclockfirst.sh disable
+    #chroot $rootfs /usr/sbin/update-rc.d -f hwclockfirst.sh disable
 
     # generate new SSH keys
     if [ -x $rootfs/var/lib/dpkg/info/openssh-server.postinst ]; then
@@ -238,10 +238,10 @@ sudo
     qemu-debootstrap --verbose --variant=minbase --arch=$arch \
         --include=$packages \
         "$release" "$cache/partial-$release-$arch" $MIRROR
-    #if [ $? -ne 0 ]; then
-    #    echo "Failed to download the rootfs, aborting."
-    #    return 1
-    #fi
+    if [ $? -ne 0 ]; then
+        echo "Failed to download the rootfs, aborting."
+        return 1
+    fi
 
     mv "$1/partial-$release-$arch" "$1/rootfs-$release-$arch"
     echo "Download complete."
