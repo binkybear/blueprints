@@ -53,7 +53,7 @@ mount_binfmts () {
     update-binfmts --enable
 }
 
-OPT_BLUEPRINT="debian"
+OPT_BLUEPRINT="kali"
 OPT_NAME="$OPT_BLUEPRINT"
 
 ARGS="$(getopt -o b:n:h --long blueprint:,name:,help -n 'build.sh' -- "$@")"
