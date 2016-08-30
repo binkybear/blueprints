@@ -28,6 +28,17 @@ LXC_TEMPLATE_OVERRIDE="$(pwd)/lxc/templates/kali.sh"
 # script to run inside the chroot
 CHROOT_SCRIPT="chroot-configure.sh"
 
+if [ ! -f "/usr/share/debootstrap/scripts/kali-rolling" ]; then
+    
+    # For those not building on Kali
+    echo "Missing kali from debootstrap"
+
+    curl "http://git.kali.org/gitweb/?p=packages/debootstrap.git;a=blob_plain;f=scripts/kali;h=50d7ef5b4e9e905cc6da8655416cdf3ef559911e;hb=refs/heads/kali/master" > /usr/share/debootstrap/scripts/kali
+    ln -s /usr/share/debootstrap/scripts/kali /usr/share/debootstrap/scripts/kali-rolling
+fi
+
+apt-key adv --keyserver hkp://keys.gnupg.net --recv-keys 7D8D0BF6
+
 pecho () {
     echo "[ $BLUEPRINT_NAME ] $1"
 }

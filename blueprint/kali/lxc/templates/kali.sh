@@ -211,7 +211,8 @@ isc-dhcp-client,\
 netbase,\
 net-tools,\
 iproute,\
-openssh-server
+openssh-server,\
+kali-archive-keyring
 
     cache=$1
     arch=$2
