@@ -109,7 +109,7 @@ EOF
 
     pecho "configuring rootfs..."
     cp "$CHROOT_SCRIPT" "${rootfs}/tmp"
-    chroot "$rootfs" bash -c "cd /tmp && ./${CHROOT_SCRIPT}"
+    chroot "$rootfs" bash -c "cd /tmp && chmod 755 ${CHROOT_SCRIPT} && ./${CHROOT_SCRIPT}"
 }
 
 blueprint_build () {
