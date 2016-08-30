@@ -215,7 +215,11 @@ net-tools,\
 iproute,\
 openssh-server,\
 tzdata,\
-kali-archive-keyring
+kali-archive-keyring,\
+kali-defaults,\
+kali-menu,\
+kali-root-login,\
+sudo
 
     cache=$1
     arch=$2
