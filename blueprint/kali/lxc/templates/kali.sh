@@ -95,16 +95,9 @@ $hostname
 EOF
 
     # reconfigure some services
-    if [ -z "$LANG" ]; then
-        chroot $rootfs locale-gen en_US.UTF-8 UTF-8
-        chroot $rootfs update-locale LANG=en_US.UTF-8
-    else
-        encoding=$(echo $LANG | cut -d. -f2)
-        chroot $rootfs sed -e "s/^# \(${LANG} ${encoding}\)/\1/" \
-            -i /etc/locale.gen 2> /dev/null
-        chroot $rootfs locale-gen $LANG $encoding
-        chroot $rootfs update-locale LANG=$LANG
-    fi
+
+    encoding=$(echo $LANG | cut -d. -f2)
+    chroot $rootfs sed -e "s/^# \(${LANG} ${encoding}\)/\1/" -i /etc/locale.gen 2> /dev/null
 
     # remove pointless services in a container
     chroot $rootfs /usr/sbin/update-rc.d -f checkroot.sh disable
@@ -205,6 +198,9 @@ download_kali()
     packages=\
 ifupdown,\
 locales,\
+locales-all,\
+nano,\
+git,\
 libui-dialog-perl,\
 dialog,\
 isc-dhcp-client,\
