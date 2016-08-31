@@ -237,7 +237,7 @@ sudo
     echo "Downloading kali minimal ..."
     qemu-debootstrap --verbose --variant=minbase --arch=$arch \
         --include=$packages \
-        "$release" "$cache/partial-$release-$arch" $MIRROR
+        "$release" "$cache/partial-$release-$arch" $MIRROR /usr/share/debootstrap/scripts/kali
     if [ $? -ne 0 ]; then
         echo "Failed to download the rootfs, aborting."
         return 1
