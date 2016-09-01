@@ -324,11 +324,11 @@ copy_configuration()
     ## Add all the includes
     echo "" >> $path/config
     echo "# Common configuration" >> $path/config
-    if [ -e "${LXC_TEMPLATE_CONFIG}/kali.common.conf" ]; then
-        echo "lxc.include = ${LXC_TEMPLATE_CONFIG}/kali.common.conf" >> $path/config
+    if [ -e "${LXC_TEMPLATE_CONFIG}/debian.common.conf" ]; then
+        echo "lxc.include = ${LXC_TEMPLATE_CONFIG}/debian.common.conf" >> $path/config
     fi
-    if [ -e "${LXC_TEMPLATE_CONFIG}/kali.${release}.conf" ]; then
-        echo "lxc.include = ${LXC_TEMPLATE_CONFIG}/kali.${release}.conf" >> $path/config
+    if [ -e "${LXC_TEMPLATE_CONFIG}/debian.${release}.conf" ]; then
+        echo "lxc.include = ${LXC_TEMPLATE_CONFIG}/debian.${release}.conf" >> $path/config
     fi
 
     ## Add the container-specific config
@@ -377,7 +377,7 @@ usage()
 {
     cat <<EOF
 $1 -h|--help -p|--path=<path> [-a|--arch] [-r|--release=<release>] [-c|--clean]
-release: the kali release (e.g. wheezy): defaults to current stable
+release: the kali release (e.g. kali-rolling): defaults to current stable
 arch: the container architecture (e.g. amd64): defaults to host arch
 EOF
     return 0

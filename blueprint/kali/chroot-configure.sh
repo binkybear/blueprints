@@ -19,6 +19,12 @@
 
 set -e
 
+# Make sure password is set
+echo "root:toor" | chpasswd
+
+# Kali hostname
+hostname kali
+
 #
 # do stuff that requires a chroot context
 #
@@ -37,9 +43,6 @@ dpkg -i maru_* || true
 
 # install all missing packages in "Depends"
 apt-get -y install -f
-
-# get rid of xscreensaver and annoying warning
-apt-get -y purge xscreensaver xscreensaver-data
 
 #
 # shrink the rootfs as much as possible
