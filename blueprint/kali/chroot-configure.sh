@@ -42,7 +42,7 @@ apt-get -y install xfce4-terminal \
 dpkg -i maru_* || true
 
 # install all missing packages in "Depends"
-apt-get -y install -f
+apt-get -y --allow-unaunthenticated install -f
 
 #
 # shrink the rootfs as much as possible
