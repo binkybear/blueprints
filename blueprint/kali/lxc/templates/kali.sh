@@ -207,7 +207,6 @@ locales,\
 locales-all,\
 nano,\
 git,\
-libui-dialog-perl,\
 dialog,\
 isc-dhcp-client,\
 netbase,\
